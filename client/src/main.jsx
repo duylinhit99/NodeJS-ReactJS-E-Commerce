@@ -16,6 +16,7 @@ import Register from './components/Member/Register.jsx'
 import ProductList from './components/Products/ProductList.jsx'
 import ProductDetail from './components/Products/ProductDetail.jsx'
 import Cart from './components/Cart/Cart.jsx'
+import CheckOutCart from './components/Cart/CheckOutCart.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/product/list' element={<ProductList />} />
           <Route path='/product/:id' element={<ProductDetail />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/cart/checkout' element={<CheckOutCart />} />
         </Routes>
       </App>
     </Router>

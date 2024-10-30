@@ -1,6 +1,8 @@
 const cartModel = require('../models/cartModel');
 const { PrismaClient } = require("../generated/client");
 const prisma = new PrismaClient();
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'your_secret_key'; // Chuỗi bí mật của bạn
 
 const getCartProduct = async (req, res) => {
     const products = req.body;
@@ -26,6 +28,25 @@ const getCartProduct = async (req, res) => {
 
 }
 
+const orderProduct = async (req, res) => {
+    const userId = req.params.id;
+    const product = req.body;  // Đảm bảo sử dụng đúng thuộc tính `products` từ `req.body`
+    console.log(product);
+
+    try {
+        const order = await cartModel.createOrder(userId, product);
+        console.log("Đơn hàng đã được tạo:", order);
+        res.status(201).json({
+            order: order,
+            message: "Đơn hàng đã được tạo"
+        });
+    } catch (error) {
+        console.error("Lỗi khi tạo đơn hàng:", error);
+        res.status(500).json({ error: "Không thể tạo đơn hàng" });
+    }
+}
+
 module.exports = {
-    getCartProduct
+    getCartProduct,
+    orderProduct
 }

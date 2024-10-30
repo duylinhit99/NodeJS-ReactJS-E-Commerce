@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'your_secret_key';
+const REFRESH_TOKEN_SECRET = 'refresh_token_secret';
 
 const checkLogin = async (req, res) => {
     const { username, password } = req.body;
@@ -42,10 +43,18 @@ const checkLogin = async (req, res) => {
             { expiresIn: '1h' } //Token hết hạn sau 1h
         )
 
+        // Tạo Refresh Token (thời hạn lâu hơn)
+        const refreshToken = jwt.sign(
+            { userId: user.id },
+            REFRESH_TOKEN_SECRET,
+            { expiresIn: '7d' }
+        );
+
         // Trả về token cho client
         res.status(200).json({
             message: 'Login successful',
             token: token,
+            refreshToken: refreshToken,
             username: username
         });
     } catch (error) {

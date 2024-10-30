@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 import api from '../../api';
 import { toast } from 'react-toastify';
-const Cart = () => {
+import { Link } from 'react-router-dom';
+const Cart = (props) => {
     const [data, setData] = useState([])
     const [total, setTotal] = useState(0)
+    const navigate = useNavigate();
+
     useEffect(() => {
         const cart = JSON.parse(localStorage.getItem('cart'))
         if (cart) {
@@ -14,14 +18,14 @@ const Cart = () => {
         }
     }, [])
 
+    console.log(data);
+
     useEffect(() => {
         const totalProduct = data.reduce((total, value) => {
             const price = Number(value.price) || 0; // Chuyển đổi về số nếu có thể
             const qty = Number(value.quantity) || 0; // Chuyển đổi về số nếu có thể
             return total + (price * qty);
         }, 0);
-        console.log(data);
-
         setTotal(totalProduct)
     }, [data])
 
@@ -91,6 +95,14 @@ const Cart = () => {
         setData(newData); // Cập nhật trạng thái
     };
 
+    const handleNavigate = () => {
+        const cartData = data; // Data to send
+        navigate("/cart/checkout", { state: cartData });
+    };
+
+    const handleBuy = () => {
+        handleNavigate();
+    }
     const renderData = () => {
         if (Object.keys(data).length > 0) {
             return Object.keys(data).map((item, i) => {
@@ -143,7 +155,7 @@ const Cart = () => {
 
             {/* <!-- Tổng thanh toán --> */}
             <div className="mt-8 bg-white shadow-lg rounded-lg p-6 dark:bg-slate-800">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Order Summary</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Order Summary</h2>
 
                 <div className="flex justify-between border-b pb-2 dark:text-white">
                     <p className="text-lg">Subtotal:</p>
@@ -161,7 +173,7 @@ const Cart = () => {
                 </div>
 
                 <div className="flex justify-end mt-4">
-                    <button className="w-[200px] py-3 bg-primary text-white rounded-lg hover:scale-105 transform transition duration-300">Buy</button>
+                    <button className="w-[200px] py-3 bg-primary text-white rounded-lg hover:scale-105 transform transition duration-300" onClick={handleBuy}>CheckOut</button>
                 </div>
             </div>
         </div>

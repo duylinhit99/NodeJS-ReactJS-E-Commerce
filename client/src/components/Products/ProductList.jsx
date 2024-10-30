@@ -22,8 +22,8 @@ const ProductList = () => {
         cart[id] = (cart[id] || 0) + 1; // Tăng số lượng, khởi tạo là 1 nếu chưa có
         localStorage.setItem('cart', JSON.stringify(cart))
 
-        const totalQty = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
-        localStorage.setItem('totalQty', JSON.stringify(totalQty))
+        const tongQty = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+        localStorage.setItem('tongQty', JSON.stringify(tongQty))
 
         if (cart) {
             toast.success("Added successfully");
