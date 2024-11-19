@@ -21,7 +21,21 @@ const getProductById = async (id) => {
     }
 }
 
+const getProCategoryById = async (id) => {
+    try {
+        return prisma.product.findMany({
+            where: {
+                categoryId: id
+            }
+        })
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+    }
+}
+
 module.exports = {
     getProduct,
-    getProductById
+    getProductById,
+    getProCategoryById
 }

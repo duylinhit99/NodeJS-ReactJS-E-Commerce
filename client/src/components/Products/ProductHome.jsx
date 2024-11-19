@@ -11,11 +11,14 @@ const ProductHome = () => {
     useEffect(() => {
         api.get("/product/list")
             .then(res => {
-                setProduct(res.data);
+                console.log(res);
+
+                setProduct(res.data.data);
             }).catch(error => {
                 console.log(error);
             })
     }, [])
+    console.log(Object.keys(product).slice(0, 5));
 
     const handleProductClick = (id) => {
         navigate(`product/${id}`)

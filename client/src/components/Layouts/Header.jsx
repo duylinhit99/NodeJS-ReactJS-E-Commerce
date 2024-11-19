@@ -4,7 +4,30 @@ import { FaCartShopping } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
 import DarkMore from './DarkMore'
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '../../api'
 const Header = () => {
+    const [category, setCategory] = useState({})
+    useEffect(() => {
+        api.get('/category').then(res => {
+            setCategory(res.data.categories)
+        }).catch(error => console.log(error)
+        )
+    }, [])
+    // console.log(category[0]);
+    const renderData = () => {
+        if (Object.keys(category).length > 0) {
+            return Object.keys(category).map((key, index) => {
+                return (
+                    <li key={key}>
+                        <Link to={`category/${category[key].id}/products`} className='inline-block w-full rounded-md p-2 hover:bg-primary/20'>
+                            {category[key].name}
+                        </Link>
+                    </li>
+                )
+            })
+        }
+    }
 
     const checkLogin = JSON.parse(localStorage.getItem('login'))
     const navigate = useNavigate()
@@ -86,11 +109,22 @@ const Header = () => {
                             <li>
                                 <a href="" className='inline-block px-4 hover:text-primary duration-200'>Blog</a>
                             </li>
-                            <li>
-                                <a href="" className='inline-block px-4 hover:text-primary duration-200'>Kids Wear</a>
-                            </li>
-                            <li>
-                                <a href="" className='inline-block px-4 hover:text-primary duration-200'>Mens Wear</a>
+                            <li className='group relative cursor-pointer'>
+                                <a href="#" className='flex items-center gap-[2px] py-2'>
+                                    Category
+                                    <span>
+                                        <IoMdArrowDropdown
+                                            className='transition-all duration-200 group-hover:rotate-180'
+                                        />
+                                    </span>
+                                </a>
+                                <div className='absolute z-[9999] hidden
+                                        group-hover:block w-[150px] rounded-md bg-white p-2 text-black
+                                        shadow-md'>
+                                    <ul>
+                                        {renderData()}
+                                    </ul>
+                                </div>
                             </li>
                             <li>
                                 <a href="" className='inline-block px-4 hover:text-primary duration-200'>Electronics</a>

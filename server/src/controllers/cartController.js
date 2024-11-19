@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'your_secret_key'; // Chuỗi bí mật của bạn
 
+//lấy toàn bộ sản phẩm trong giỏ hàng
 const getCartProduct = async (req, res) => {
     const products = req.body;
 
@@ -28,6 +29,7 @@ const getCartProduct = async (req, res) => {
 
 }
 
+//tạo đơn hàng
 const orderProduct = async (req, res) => {
     const userId = req.params.id;
     const product = req.body;  // Đảm bảo sử dụng đúng thuộc tính `products` từ `req.body`

@@ -6,16 +6,31 @@ import AddCart from '../Cart/AddCart';
 import { toast } from 'react-toastify';
 const ProductList = () => {
     const [product, setProduct] = useState({})
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(false);
+    let limit = 10
     const navigate = useNavigate()
     const paths = useLocation()
+
+    const fetchProducts = async (page = 1) => {
+        setLoading(true);
+        try {
+            const res = await api.get(`/product/list?page=${page}&limit=${limit}`);
+            setProduct(res.data.data);
+            setTotalPages(res.data.meta.totalPages);
+            setCurrentPage(page);
+        } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Gọi API khi component render lần đầu
     useEffect(() => {
-        api.get("/product/list")
-            .then(res => {
-                setProduct(res.data);
-            }).catch(error => {
-                console.log(error);
-            })
-    }, [])
+        fetchProducts(1); // Lấy dữ liệu trang đầu tiên
+    }, []);
 
     const handleAddToCart = (id) => {
         const cart = JSON.parse(localStorage.getItem('cart')) || {}
@@ -33,6 +48,13 @@ const ProductList = () => {
     const handleProductClick = (id) => {
         // Điều hướng đến sản phẩm mà không có phần "/list"
         navigate(`/product/${id}`); // Chuyển hướng đến URL mới
+    };
+
+    // Hàm xử lý chuyển trang
+    const handlePageChange = (page) => {
+        if (page > 0 && page <= totalPages) {
+            fetchProducts(page);
+        }
     };
 
     const renderProduct = () => {
@@ -64,14 +86,49 @@ const ProductList = () => {
     return (
         <div className='dark:bg-gray-800 -scroll-mb-12 pb-20'>
             <ul className='flex justify-center'>
-                <li>A</li>
-                <li>B</li>
-                <li>C</li>
+                <li>
+                    <h1 className="text-2xl font-bold mb-4 dark:text-white">Danh sách sản phẩm</h1>
+                </li>
             </ul>
             <div className='container'>
                 <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5'>
                     {renderProduct()}
                 </div>
+                {/* Nút phân trang */}
+                <div className="flex justify-center mt-6 space-x-2">
+                    {/* Nút Trang Trước */}
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+                    >
+                        Trang Trước
+                    </button>
+
+                    {/* Nút số trang */}
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            onClick={() => handlePageChange(index + 1)}
+                            className={`px-4 py-2 rounded ${currentPage === index + 1
+                                ? "bg-primary text-white"
+                                : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                                }`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+
+                    {/* Nút Trang Sau */}
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+                    >
+                        Trang Sau
+                    </button>
+                </div>
+
             </div>
         </div>
     )

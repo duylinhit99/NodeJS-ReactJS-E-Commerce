@@ -32,12 +32,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.21.0
- * Query Engine version: 08713a93b99d58f31485621c634b04983ae01d95
+ * Prisma Client JS version: 5.22.0
+ * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
  */
 Prisma.prismaVersion = {
-  client: "5.21.0",
-  engine: "08713a93b99d58f31485621c634b04983ae01d95"
+  client: "5.22.0",
+  engine: "605197351a3c8bdd595af2d2a9bc3025bca48ea2"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -194,7 +194,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\NodeJS-Learn\\Node-React-Login\\my-app\\server\\src\\generated\\client",
+      "value": "D:\\NodeJS-Learn\\NodeJS-ReactJS-E-Commerce\\server\\src\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -208,7 +208,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\NodeJS-Learn\\Node-React-Login\\my-app\\server\\schema.prisma",
+    "sourceFilePath": "D:\\NodeJS-Learn\\NodeJS-ReactJS-E-Commerce\\server\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -216,12 +216,13 @@ const config = {
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../..",
-  "clientVersion": "5.21.0",
-  "engineVersion": "08713a93b99d58f31485621c634b04983ae01d95",
+  "clientVersion": "5.22.0",
+  "engineVersion": "605197351a3c8bdd595af2d2a9bc3025bca48ea2",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

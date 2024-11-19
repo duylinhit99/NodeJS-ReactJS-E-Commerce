@@ -17,6 +17,7 @@ import ProductList from './components/Products/ProductList.jsx'
 import ProductDetail from './components/Products/ProductDetail.jsx'
 import Cart from './components/Cart/Cart.jsx'
 import CheckOutCart from './components/Cart/CheckOutCart.jsx'
+import CategoryProduct from './components/Category/CategoryProduct.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/product/:id' element={<ProductDetail />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/cart/checkout' element={<CheckOutCart />} />
+          <Route path='/category/:id/products' element={<CategoryProduct />} />
         </Routes>
       </App>
     </Router>

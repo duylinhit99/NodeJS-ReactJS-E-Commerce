@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage }).array('avatar', 5);
-
+// đăng ký user
 const registerUser = async (req, res) => {
     const { username, password, phone, address, email, avatar } = req.body;
     try {
