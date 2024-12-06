@@ -6,16 +6,35 @@ import { FaStar } from "react-icons/fa6";
 import { useParams } from 'react-router-dom'
 const CategoryProduct = () => {
     let param = useParams();
+    const [currentPage, setCurrentPage] = useState(1) //page hiện tại
+    const [totalPages, setTotalPages] = useState(1) //tổng số trang
     let id = param.id
-    console.log(id);
-
+    let limit = 10
     const [data, setData] = useState({})
-    useEffect(() => {
-        api.get(`category/${id}/products`).then(res => {
+
+    const fetchProducts = async (page = 1) => {
+        try {
+            const res = await api.get(`category/${id}/products?page=${page}&limit=${limit}`)
             console.log(res);
-            setData(res.data)
-        }).catch(error => console.log(error))
-    }, [])
+            setData(res.data.data)
+            setTotalPages(res.data.meta.totalPages);
+            setCurrentPage(page);
+        } catch (error) {
+            console.log("Lỗi khi gọi API", error)
+        }
+    }
+
+    // Gọi API khi component render lần đầu
+    useEffect(() => {
+        fetchProducts(1); // Lấy dữ liệu trang đầu tiên
+    }, []);
+
+    // Hàm xử lý chuyển trang
+    const handlePageChange = (page) => {
+        if (page > 0 && page <= totalPages) {
+            fetchProducts(page);
+        }
+    };
 
     const handleAddToCart = (id) => {
         const cart = JSON.parse(localStorage.getItem('cart')) || {}
@@ -57,13 +76,47 @@ const CategoryProduct = () => {
     return (
         <div className='dark:bg-gray-800 -scroll-mb-12 pb-20'>
             <ul className='flex justify-center'>
-                <li>A</li>
-                <li>B</li>
-                <li>C</li>
+                <li>
+                    <h1 className="text-2xl font-bold mb-4 dark:text-white">Danh sách sản phẩm</h1>
+                </li>
             </ul>
             <div className='container'>
                 <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5'>
                     {renderProduct()}
+                </div>
+                {/* Nút phân trang */}
+                <div className="flex justify-center mt-6 space-x-2">
+                    {/* Nút Trang Trước */}
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+                    >
+                        Trang Trước
+                    </button>
+
+                    {/* Nút số trang */}
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            onClick={() => handlePageChange(index + 1)}
+                            className={`px-4 py-2 rounded ${currentPage === index + 1
+                                ? "bg-primary text-white"
+                                : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                                }`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+
+                    {/* Nút Trang Sau */}
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+                    >
+                        Trang Sau
+                    </button>
                 </div>
             </div>
         </div>
